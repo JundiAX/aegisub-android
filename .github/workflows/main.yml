@@ -5,17 +5,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Set English as Default Language
+        run: |
+          cp -f app/src/main/res/values-en/strings.xml app/src/main/res/values/strings.xml
+          cp -f feature/editor/src/main/res/values-en/strings.xml feature/editor/src/main/res/values/strings.xml
+          cp -f feature/preview/src/main/res/values-en/strings.xml feature/preview/src/main/res/values/strings.xml
+
       - name: Build Debug APK
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
+          name: app-debug-en
           path: app/build/outputs/apk/debug/*.apk
